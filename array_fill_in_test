@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int island_index(char *island) {
+    char islands[] = "Greenland Bananal Fraser Java";
+    int index = 0;
+
+    for (int i = 0, j = 0; island[i] != '\0'; ) {
+        if (island[i] == islands[j]) {
+            i++;
+            j++;
+        }
+        else {
+            i = 0;
+            j++;
+        }
+        if (island[i] == '\0' && (islands[j] == ' ' || islands[j] == '\0'))
+            return index;
+        if (islands[j] == ' ')
+            index++;
+    }
+    return -1;
+}
+
+int main(void) {
+    char input_data[] = "Greenland-Bananal,8\nFraser-Greenland,10\nBananal-Fraser,3\nJava-Fraser,5\n";
+    int num = 4;
+    int arr[4][4];
+    int i = 0;
+    int j = 0;
+    int count = 1;
+    int x = 0;
+    int y = 0;
+    
+    for (int v = 0; v < num; v++) {
+        for (int h = 0; h < num; h++) {
+            arr[v][h] = 0;
+        }
+    }
+
+    while (count <= num) {
+        for (i = j; input_data[j] != '-'; j++);
+        input_data[j] = '\0';
+        x = island_index(&input_data[i]);
+        i = j + 1;
+        for ( ; input_data[j] != ','; j++);
+        input_data[j] = '\0';
+        y = island_index(&input_data[i]);
+        int a = atoi(&input_data[j + 1]);
+        for ( ;  input_data[j] != '\n'; j++);
+        j++;
+        count++;
+        arr[x][y] = a;
+        arr[y][x] = a;
+    }
+
+    for (int v = 0; v < num; v++) {
+        for (int h = 0; h < num; h++) {
+            printf("%3d  ", arr[v][h]);
+        }
+        printf("\n");
+    }
+}
